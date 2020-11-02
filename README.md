@@ -9,7 +9,7 @@
 
 #### 安装教程
 
-1.  xxxx
+1.  npm install --save gxd-helper
 2.  xxxx
 3.  xxxx
 

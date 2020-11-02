@@ -1,0 +1,30 @@
+{
+  "name": "gxd-helper",
+  "version": "1.1.0",
+  "description": "自定义工具类和工具函数",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack",
+    "dev": "webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@gitee.com:e56buy/xd-helper.git"
+  },
+  "keywords": [
+    "xd-helper"
+  ],
+  "author": "gaoshiyong1272@vip.163.com",
+  "license": "ISC",
+  "devDependencies": {
+    "webpack": "^5.3.2",
+    "webpack-cli": "^4.1.0",
+    "simple-pinyin": "^3.0.2",
+    "js-base64": "^2.6.4",
+    "md5": "^2.3.0",
+    "terser-webpack-plugin": "^3.0.1"
+  },
+  "dependencies": {
+    "crypto-js": "^4.0.0"
+  }
+}
