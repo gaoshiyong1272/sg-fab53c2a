@@ -33,3 +33,14 @@ npm run dev
 import gxdHelper from 'gxd-helper';
 let {cookie, storage, pinyin, helper } = gxdHelper;
 let helperObj = helper(defautlSetting);
+
+# defautlSetting配置 需要提供删除用户登录状态功能是，需要自行配置相关键值
+
+{
+    ...
+    #用户登录storage存储key
+    userInfoSaveStoreKey: 'admin_user_info', 
+    #用户登录Cookie存储key
+    userInfoSaveCookieKey: 'jufubao-access-token',
+    ...
+}
