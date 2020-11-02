@@ -12,7 +12,7 @@ const helper= (setting) =>{
 export default {
   cookie,
   storage,
-  pinyin,
-  helper
+  pinyin, helper
+
 }
 

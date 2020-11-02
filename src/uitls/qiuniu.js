@@ -167,13 +167,6 @@ let safe64 = function (base64) {
  * @description 配置文件
  * @type {{bucketName: string, static: string, SK: string, AK: string, url: string}}
  */
-// export let option = {
-//   AK: 'bP3Ca5dtSJBNaWwMkihfhuE30CbAZnYrNzQm6eMN', //七牛AK
-//   SK: 'pPNgWwRL3_Jlj7cPtpYbkhXn01EOZTtUhOs3NqZM', //七牛SK
-//   bucketName: 'e56buystatic', //七牛桶名称
-//   url: 'https://up-z1.qiniup.com', //七牛API地址
-//   static: 'http://static.e56buy.com' //静态域名访问地址
-// };
 
 export let option = {
   AK: 'Ue_RwG8cW3HESqdOa77k0REef8zphb8g-kNn-N5P', //七牛AK

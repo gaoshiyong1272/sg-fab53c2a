@@ -1,6 +1,6 @@
 'use strict';
 
-import helper from "./helper";
+import {checkVarType} from './common';
 
 /**
  * 本地Session存储
@@ -24,8 +24,8 @@ class SessionStorage {
   set(key, value) {
     this.check(key);
     /**数组与对象需要序列号**/
-    if (helper.checkVarType(value) === 'object'
-      || helper.checkVarType(value) === 'array'
+    if (checkVarType(value) === 'object'
+      || checkVarType(value) === 'array'
     ) {
       value = JSON.stringify(value);
     }
@@ -86,8 +86,8 @@ class LocalStorage {
     this.check(key);
 
     /**数组与对象需要序列号**/
-    if (helper.checkVarType(value) === 'object'
-      || helper.checkVarType(value) === 'array'
+    if (checkVarType(value) === 'object'
+      || checkVarType(value) === 'array'
     ) {
       value = JSON.stringify(value);
     }
