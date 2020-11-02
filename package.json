@@ -1,11 +1,11 @@
 {
   "name": "gxd-helper",
-  "version": "1.2.5",
+  "version": "1.2.6",
   "description": "自定义工具类和工具函数",
   "main": "index.js",
   "scripts": {
-    "build": "cross-env NODE_ENV=production webpack --mode production",
-    "dev": "cross-env NODE_ENV=development webpack-dev-server --inline --hot --open --mode development"
+    "gxdbuild": "cross-env NODE_ENV=production webpack --mode production",
+    "gxddev": "cross-env NODE_ENV=development webpack-dev-server --inline --hot --open --mode development"
   },
   "repository": {
     "type": "git",
