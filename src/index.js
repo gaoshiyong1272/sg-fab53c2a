@@ -6,7 +6,7 @@ import pinyin from "./uitls/pinyin";
 import Helper from "./uitls/helper";
 
 const helper= (setting) =>{
-  return Helper(setting)
+  return new Helper(setting)
 };
 
 export default {

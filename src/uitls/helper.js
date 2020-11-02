@@ -54,13 +54,15 @@ class Helpers {
   }
 
   /***
-   * 获取随机数字
-   * @param min
-   * @param max
+   * @description 随机数字值
+   * @param min 最小数
+   * @param max 最大数
    * @returns {*}
    */
-  random(min=0 , max = 100) {
-    return faker.random.number({min, max});
+  random(min, max) {
+    let Range = max - min;
+    let Rand = Math.random();
+    return (min + Math.round(Rand * Range));
   }
 
   /**
@@ -205,6 +207,30 @@ class Helpers {
     }
   }
 
+  /***
+   * @description 转化为vue element UI选择插件数据格式
+   * @example {key1: 'name',key1: 'name'}
+   * @param data
+   * @return Array
+   */
+  keyToSelectData(data) {
+    let temp = [];
+    let reg = /^[0-9]+$/;
+    this.forEach(data, (key) => {
+      let k = key;
+      if (reg.test(key)) k = parseInt(key);
+      temp.push({
+        id: k,
+        key: key,
+        value: k,
+        label: data[key],
+        fullname: pinyin.getfullName(data[key]),
+        firstLetter: pinyin.getFirstLetter(data[key]),
+      });
+    });
+    return temp
+  }
+
   /**
    * @description 转化为vue element UI选择插件数据格式
    * @example [{id: 1,name: 'name1'},{id: 1,name: 'name1'}];
@@ -321,6 +347,52 @@ class Helpers {
 
     });
     return data;
+  }
+
+
+  checkPath(path, params) {
+    let arr = path.split('/');
+    this.forEach(params, (key) => {
+      let val = params[key];
+      for (let i = 0; i < arr.length; i++) {
+        if (val === arr[i]) {
+          arr.splice(i, 1, ':' + key);
+        }
+      }
+    });
+    return arr.join('/');
+  }
+
+  /**
+   * @description Menu Tree
+   * @param paths
+   * @param path
+   */
+  isFindPath(paths, path) {
+    let temp = [];
+    let deep = (tree, parent) => {
+      for (let i = 0; i < tree.length; i++) {
+        if (tree[i]['children'] && tree[i]['children'].length > 0) {
+          deep(tree[i]['children']);
+        } else {
+          temp.push(tree[i]['parentFullPath']);
+          //console.log('parentFullPath', tree[i]['parentFullPath']);
+        }
+      }
+    };
+    deep(paths);
+
+    let flag = false;
+    for (let j = 0; j < temp.length; j++) {
+      let fullname = this.checkPath(path.path, path.params);
+      //console.log('fullname', fullname , temp[j]);
+      if (fullname === temp[j]) {
+        flag = true;
+        break;
+      }
+    }
+    //console.log('flag', flag, this.checkPath(path.path, path.params));
+    return flag;
   }
 
 
@@ -500,6 +572,27 @@ class Helpers {
     } else {
       throw new Error('无配置信息选项');
     }
+  }
+
+  /***
+   * @description 根据路由获取商品类型
+   * @param markeConstant
+   * @param route
+   */
+  getMarketType(route, markeConstant) {
+    if(!markeConstant) {
+      markeConstant = {
+        SHOP: '1',
+        CAKE: '2',
+        BOOK: '4',
+        MEDIA: '5',
+        TRAVEL: '6'
+      }
+    }
+    let routeArr = route.path.split('/');
+    let typeKey = routeArr[2].toLocaleUpperCase();
+    console.log('routeArr', markeConstant[typeKey]);
+    return markeConstant[typeKey];
   }
 
 
