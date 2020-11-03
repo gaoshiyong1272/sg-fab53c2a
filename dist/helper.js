@@ -1311,10 +1311,21 @@ class helper_Helpers {
     }
     let routeArr = route.path.split('/');
     let typeKey = routeArr[2].toLocaleUpperCase();
-    console.log('routeArr', markeConstant[typeKey]);
+    console.log('routeArr', markeConstant[typeKey],typeKey);
     return markeConstant[typeKey];
   }
 
+  /***
+   * @description 根据路由获取商品类型路由
+   * @param route
+   * @param index
+   */
+  getMarketRouteListName(route,index){
+    let routeArr = route.path.split('/');
+    let typeKey = routeArr[index].toLocaleLowerCase();
+    console.log('routeArr', typeKey, index);
+    return `/market/${typeKey}/list`;
+  }
 
 }
 
