@@ -1316,7 +1316,7 @@ class helper_Helpers {
   }
 
   /***
-   * @description 根据路由获取商品类型路由
+   * @description 根据路由获取商品类型路由名称
    * @param route
    * @param index
    */
