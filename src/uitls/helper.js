@@ -47,7 +47,9 @@ class Helpers {
    * @returns {any}
    */
   cloneDeep(json){
-    if(this.checkVarType(json) ==='object' || this.checkVarType(json) === 'array') {
+    if(this.checkVarType(json) ==='object'
+      || this.checkVarType(json) === 'array'
+    ) {
       return JSON.parse(JSON.stringify(json));
     }
     return json;
@@ -100,7 +102,9 @@ class Helpers {
    * @returns {boolean}
    */
   inArray(sourceArray = [], findArray = []){
-    if(this.checkVarType(sourceArray) === 'array' && this.checkVarType(findArray) === 'array'){
+    if(this.checkVarType(sourceArray) === 'array' &&
+      this.checkVarType(findArray) === 'array'
+    ){
       let sourceArraylen = sourceArray.length;
       let find = this.cloneDeep(findArray);
       let temp = [];
@@ -130,6 +134,7 @@ class Helpers {
    */
   repeatArray(sourceArray = []){
     if(this.checkVarType(sourceArray) !== 'array') {
+      console.log('repeatArray.sourceArray.error', sourceArray);
       throw new Error('sourceArray参数类型是数组')
     }
     return Array.from(new Set(sourceArray))
@@ -143,9 +148,12 @@ class Helpers {
    */
   unionArray(sourceArray = [], findArray = []){
     if (this.checkVarType(sourceArray) !== 'array') {
+      console.log('unionArray.sourceArray.error', sourceArray);
       throw new Error('sourceArray参数类型是数组')
+
     }
     if (this.checkVarType(findArray) !== 'array') {
+      console.log('unionArray.findArray.error', findArray);
       throw new Error('findArray参数类型是数组')
     }
     return Array.from(new Set(sourceArray.concat(findArray)))
@@ -159,9 +167,11 @@ class Helpers {
    */
   intersectionArray(sourceArray = [], findArray = []){
     if (this.checkVarType(sourceArray) !== 'array') {
+      console.log('intersectionArray.sourceArray.error', sourceArray);
       throw new Error('sourceArray参数类型是数组')
     }
     if (this.checkVarType(findArray) !== 'array') {
+      console.log('intersectionArray.findArray.error', findArray);
       throw new Error('findArray参数类型是数组')
     }
     return sourceArray.filter(function (v) {
@@ -177,9 +187,11 @@ class Helpers {
    */
   differenceArray(sourceArray = [], findArray = []){
     if (this.checkVarType(sourceArray) !== 'array') {
+      console.log('differenceArray.sourceArray.error', sourceArray);
       throw new Error('sourceArray参数类型是数组')
     }
     if (this.checkVarType(findArray) !== 'array') {
+      console.log('differenceArray.findArray.error', findArray);
       throw new Error('findArray参数类型是数组')
     }
     return sourceArray.filter(function (v) {
@@ -189,6 +201,27 @@ class Helpers {
     }))
   }
 
+  /**
+   * @description 检查对象或者数组是否为空
+   * @param obj
+   * @return boolean
+   */
+  isEmpty(obj) {
+    if (this.checkVarType(obj) === 'array' ||
+      this.checkVarType(obj) === 'object'
+    ) {
+      let str = JSON.stringify(obj);
+      if (str === '{}' || str === '[]') {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      console.log('isEmpty.error', obj);
+      throw new Error('只支持数组与JSON对象格式');
+    }
+  }
+
 
   /**
    * @description 只支持数组与JSON对象格式遍历
@@ -196,13 +229,14 @@ class Helpers {
    * @param callback
    */
   forEach(source, callback){
-    if(this.checkVarType(source) === 'object') {
+    if(this.checkVarType(source) === 'object' && !this.isEmpty(source)) {
       Object.keys(source).forEach(callback);
     }else if(this.checkVarType(source) === 'array') {
       source.forEach((item, index)=>{
         callback(index);
       });
     }else{
+      console.log('forEach.error', source);
       throw new Error('只支持数组与JSON对象格式');
     }
   }
@@ -241,6 +275,7 @@ class Helpers {
   idToSelectData(data, name = 'name', id = 'id') {
 
     if (this.checkVarType(data) !== 'array') {
+      console.log('idToSelectData() Data type not array', data);
       console.error('idToSelectData() Data type not array');
       return [];
     }
@@ -295,7 +330,9 @@ class Helpers {
       return items;
     }
     else{
+      console.log('isKeyInLists.error', list);
       throw new Error('只支持数组与JSON对象格式');
+
     }
   }
 
@@ -320,6 +357,7 @@ class Helpers {
       });
       return arr;
     } else {
+      console.log('getListKeyForValue.error', list);
       throw new Error('只支持数组与JSON对象格式');
     }
   }
@@ -600,11 +638,23 @@ class Helpers {
    * @param route
    * @param index
    */
-  getMarketRouteListName(route,index){
+  getMarketRouteListName(route,index=2){
     let routeArr = route.path.split('/');
     let typeKey = routeArr[index].toLocaleLowerCase();
     console.log('routeArr', typeKey, index);
     return `/market/${typeKey}/list`;
+  }
+
+  /***
+   * @description 获取路由某段值
+   * @param route
+   * @param index
+   */
+  getMarketRouteKey(route, index=0) {
+    let routeArr = route.path.split('/');
+    let typeKey = routeArr[index].toLocaleLowerCase();
+    console.log('routeArr', typeKey, index);
+    return typeKey
   }
 
 }
