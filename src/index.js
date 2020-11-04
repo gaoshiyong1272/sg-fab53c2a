@@ -6,13 +6,19 @@ import pinyin from "./uitls/pinyin";
 import Helper from "./uitls/helper";
 
 const helper= (setting) =>{
-  return Helper(setting)
+  return new Helper(setting)
 };
+
+if (typeof window !== 'undefined') {
+  window['xdHelper'] = helper;
+  window['xdCookie'] = cookie;
+  window['xdStorage'] = storage;
+  window['xdPinyin'] = pinyin;
+}
 
 export default {
   cookie,
   storage,
-  pinyin,
-  helper
+  pinyin, helper
 }
 

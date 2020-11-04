@@ -4,6 +4,7 @@ import pinyin from "./pinyin";
 import {Base64} from 'js-base64';
 import cookie from "./cookie";
 import storage from "./storage";
+import {checkVarType} from  './common';
 
 
 class Helpers {
@@ -18,20 +19,7 @@ class Helpers {
    * @returns {*}
    */
 	checkVarType(obj){
-		let toString = Object.prototype.toString;
-		let map = {
-			'[object Boolean]': 'boolean',
-			'[object Number]': 'number',
-			'[object String]': 'string',
-			'[object Function]': 'function',
-			'[object Array]': 'array',
-			'[object Date]': 'date',
-			'[object RegExp]': 'regExp',
-			'[object Undefined]': 'undefined',
-			'[object Null]': 'null',
-			'[object Object]': 'object'
-		};
-		return map[toString.call(obj)];
+    return checkVarType(obj)
 	}
 
   /**
@@ -59,20 +47,24 @@ class Helpers {
    * @returns {any}
    */
   cloneDeep(json){
-    if(this.checkVarType(json) ==='object' || this.checkVarType(json) === 'array') {
+    if(this.checkVarType(json) ==='object'
+      || this.checkVarType(json) === 'array'
+    ) {
       return JSON.parse(JSON.stringify(json));
     }
     return json;
   }
 
   /***
-   * 获取随机数字
-   * @param min
-   * @param max
+   * @description 随机数字值
+   * @param min 最小数
+   * @param max 最大数
    * @returns {*}
    */
-  random(min=0 , max = 100) {
-    return faker.random.number({min, max});
+  random(min, max) {
+    let Range = max - min;
+    let Rand = Math.random();
+    return (min + Math.round(Rand * Range));
   }
 
   /**
@@ -110,7 +102,9 @@ class Helpers {
    * @returns {boolean}
    */
   inArray(sourceArray = [], findArray = []){
-    if(this.checkVarType(sourceArray) === 'array' && this.checkVarType(findArray) === 'array'){
+    if(this.checkVarType(sourceArray) === 'array' &&
+      this.checkVarType(findArray) === 'array'
+    ){
       let sourceArraylen = sourceArray.length;
       let find = this.cloneDeep(findArray);
       let temp = [];
@@ -140,6 +134,7 @@ class Helpers {
    */
   repeatArray(sourceArray = []){
     if(this.checkVarType(sourceArray) !== 'array') {
+      console.log('repeatArray.sourceArray.error', sourceArray);
       throw new Error('sourceArray参数类型是数组')
     }
     return Array.from(new Set(sourceArray))
@@ -153,9 +148,12 @@ class Helpers {
    */
   unionArray(sourceArray = [], findArray = []){
     if (this.checkVarType(sourceArray) !== 'array') {
+      console.log('unionArray.sourceArray.error', sourceArray);
       throw new Error('sourceArray参数类型是数组')
+
     }
     if (this.checkVarType(findArray) !== 'array') {
+      console.log('unionArray.findArray.error', findArray);
       throw new Error('findArray参数类型是数组')
     }
     return Array.from(new Set(sourceArray.concat(findArray)))
@@ -169,9 +167,11 @@ class Helpers {
    */
   intersectionArray(sourceArray = [], findArray = []){
     if (this.checkVarType(sourceArray) !== 'array') {
+      console.log('intersectionArray.sourceArray.error', sourceArray);
       throw new Error('sourceArray参数类型是数组')
     }
     if (this.checkVarType(findArray) !== 'array') {
+      console.log('intersectionArray.findArray.error', findArray);
       throw new Error('findArray参数类型是数组')
     }
     return sourceArray.filter(function (v) {
@@ -187,9 +187,11 @@ class Helpers {
    */
   differenceArray(sourceArray = [], findArray = []){
     if (this.checkVarType(sourceArray) !== 'array') {
+      console.log('differenceArray.sourceArray.error', sourceArray);
       throw new Error('sourceArray参数类型是数组')
     }
     if (this.checkVarType(findArray) !== 'array') {
+      console.log('differenceArray.findArray.error', findArray);
       throw new Error('findArray参数类型是数组')
     }
     return sourceArray.filter(function (v) {
@@ -199,6 +201,27 @@ class Helpers {
     }))
   }
 
+  /**
+   * @description 检查对象或者数组是否为空
+   * @param obj
+   * @return boolean
+   */
+  isEmpty(obj) {
+    if (this.checkVarType(obj) === 'array' ||
+      this.checkVarType(obj) === 'object'
+    ) {
+      let str = JSON.stringify(obj);
+      if (str === '{}' || str === '[]') {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      console.log('isEmpty.error', obj);
+      throw new Error('只支持数组与JSON对象格式');
+    }
+  }
+
 
   /**
    * @description 只支持数组与JSON对象格式遍历
@@ -206,15 +229,40 @@ class Helpers {
    * @param callback
    */
   forEach(source, callback){
-    if(this.checkVarType(source) === 'object') {
+    if(this.checkVarType(source) === 'object' && !this.isEmpty(source)) {
       Object.keys(source).forEach(callback);
     }else if(this.checkVarType(source) === 'array') {
       source.forEach((item, index)=>{
         callback(index);
       });
     }else{
+      console.log('forEach.error', source);
       throw new Error('只支持数组与JSON对象格式');
     }
+  }
+
+  /***
+   * @description 转化为vue element UI选择插件数据格式
+   * @example {key1: 'name',key1: 'name'}
+   * @param data
+   * @return Array
+   */
+  keyToSelectData(data) {
+    let temp = [];
+    let reg = /^[0-9]+$/;
+    this.forEach(data, (key) => {
+      let k = key;
+      if (reg.test(key)) k = parseInt(key);
+      temp.push({
+        id: k,
+        key: key,
+        value: k,
+        label: data[key],
+        fullname: pinyin.getfullName(data[key]),
+        firstLetter: pinyin.getFirstLetter(data[key]),
+      });
+    });
+    return temp
   }
 
   /**
@@ -227,6 +275,7 @@ class Helpers {
   idToSelectData(data, name = 'name', id = 'id') {
 
     if (this.checkVarType(data) !== 'array') {
+      console.log('idToSelectData() Data type not array', data);
       console.error('idToSelectData() Data type not array');
       return [];
     }
@@ -281,7 +330,9 @@ class Helpers {
       return items;
     }
     else{
+      console.log('isKeyInLists.error', list);
       throw new Error('只支持数组与JSON对象格式');
+
     }
   }
 
@@ -306,6 +357,7 @@ class Helpers {
       });
       return arr;
     } else {
+      console.log('getListKeyForValue.error', list);
       throw new Error('只支持数组与JSON对象格式');
     }
   }
@@ -333,6 +385,52 @@ class Helpers {
 
     });
     return data;
+  }
+
+
+  checkPath(path, params) {
+    let arr = path.split('/');
+    this.forEach(params, (key) => {
+      let val = params[key];
+      for (let i = 0; i < arr.length; i++) {
+        if (val === arr[i]) {
+          arr.splice(i, 1, ':' + key);
+        }
+      }
+    });
+    return arr.join('/');
+  }
+
+  /**
+   * @description Menu Tree
+   * @param paths
+   * @param path
+   */
+  isFindPath(paths, path) {
+    let temp = [];
+    let deep = (tree, parent) => {
+      for (let i = 0; i < tree.length; i++) {
+        if (tree[i]['children'] && tree[i]['children'].length > 0) {
+          deep(tree[i]['children']);
+        } else {
+          temp.push(tree[i]['parentFullPath']);
+          //console.log('parentFullPath', tree[i]['parentFullPath']);
+        }
+      }
+    };
+    deep(paths);
+
+    let flag = false;
+    for (let j = 0; j < temp.length; j++) {
+      let fullname = this.checkPath(path.path, path.params);
+      //console.log('fullname', fullname , temp[j]);
+      if (fullname === temp[j]) {
+        flag = true;
+        break;
+      }
+    }
+    //console.log('flag', flag, this.checkPath(path.path, path.params));
+    return flag;
   }
 
 
@@ -514,6 +612,50 @@ class Helpers {
     }
   }
 
+  /***
+   * @description 根据路由获取商品类型
+   * @param markeConstant
+   * @param route
+   */
+  getMarketType(route, markeConstant) {
+    if(!markeConstant) {
+      markeConstant = {
+        SHOP: '1',
+        CAKE: '2',
+        BOOK: '4',
+        MEDIA: '5',
+        TRAVEL: '6'
+      }
+    }
+    let routeArr = route.path.split('/');
+    let typeKey = routeArr[2].toLocaleUpperCase();
+    console.log('routeArr', markeConstant[typeKey],typeKey);
+    return markeConstant[typeKey];
+  }
+
+  /***
+   * @description 根据路由获取商品类型路由名称
+   * @param route
+   * @param index
+   */
+  getMarketRouteListName(route,index=2){
+    let routeArr = route.path.split('/');
+    let typeKey = routeArr[index].toLocaleLowerCase();
+    console.log('routeArr', typeKey, index);
+    return `/market/${typeKey}/list`;
+  }
+
+  /***
+   * @description 获取路由某段值
+   * @param route
+   * @param index
+   */
+  getMarketRouteKey(route, index=0) {
+    let routeArr = route.path.split('/');
+    let typeKey = routeArr[index].toLocaleLowerCase();
+    console.log('routeArr', typeKey, index);
+    return typeKey
+  }
 
 }
 
