@@ -271,8 +271,9 @@ class Helpers {
    * @param data 原始数据
    * @param name 指定Name key
    * @param id 指定Name kei
+   * @param force 字符串数字id是否强制转换数字类型
    */
-  idToSelectData(data, name = 'name', id = 'id') {
+  idToSelectData(data, name = 'name', id = 'id', force = true) {
 
     if (this.checkVarType(data) !== 'array') {
       console.log('idToSelectData() Data type not array', data);
@@ -287,13 +288,19 @@ class Helpers {
       let item = this.cloneDeep(data[index]);
       let numId = item[id];
       if (numId !== '') {
+
         //字符串数字id转number
-        if (this.checkVarType(item[id]) === 'string' && regNumber.test(item[id])) {
+        if (force && this.checkVarType(item[id]) === 'string' && regNumber.test(item[id])) {
           numId = parseInt(item[id]);
         }
+        if(force) {
+          item['id'] = numId;
+          item['key'] = numId;
+        }else {
+          if (!item['id']) item['id'] = numId;
+          if (!item['key']) item['key'] = numId;
+        }
 
-        item['id'] = numId;
-        item['key'] = numId;
         item['value'] = numId;
         item['label'] = item[name];
         item['fullname'] = pinyin.getfullName(item[name]);
