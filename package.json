@@ -12,7 +12,11 @@
     "url": "git@gitee.com:e56buy/xd-helper.git"
   },
   "keywords": [
-    "xd-helper"
+    "gxd",
+    "gxd-helper",
+    "utils",
+    "工具类函数",
+    "Tools"
   ],
   "author": "gaoshiyong1272@vip.163.com",
   "license": "ISC",
