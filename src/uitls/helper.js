@@ -664,6 +664,73 @@ class Helpers {
     return typeKey
   }
 
+  /**
+   * @description 判断俩个需要处理的数字谁的小数点后位数多，
+   * 以多的为准，值乘以10的小数位的幂数，相加以后，再除以10的小数位的幂数
+   * @param currentNum
+   * @param targetNum
+   */
+  checkFloatMore(currentNum, targetNum){
+    let sq1, sq2;
+    try {sq1 = currentNum.toString().split(".")[1].length;}
+    catch (e) {sq1 = 0;}
+    try {sq2 = targetNum.toString().split(".")[1].length;}
+    catch (e) {sq2 = 0;}
+    return Math.pow(10, Math.max(sq1, sq2));
+  }
+
+  /**
+   * @description 两个小数相加
+   * @param currentNum
+   * @param targetNum
+   * @return number
+   */
+  addFloatNumber(currentNum, targetNum){
+    let power = this.checkFloatMore(currentNum, targetNum);
+    return (currentNum * power + targetNum * power) / power;
+  }
+
+  /**
+   * @description 两个小数减
+   * @param currentNum
+   * @param targetNum
+   * @return number
+   */
+  cutFloatNumber(currentNum, targetNum) {
+    let power = this.checkFloatMore(currentNum, targetNum);
+    return (currentNum * power - targetNum * power) / power;
+  }
+
+  /**
+   * @description 计算两个小数相乘
+   * @param currentNum
+   * @param targetNum
+   * @returns {number}
+   */
+  multiplyFloatNumber(currentNum, targetNum){
+    let m = 0, s1 = currentNum.toString(), s2 = targetNum.toString();
+    try {m += s1.split(".")[1].length;} catch (e) {}
+    try {m += s2.split(".")[1].length;} catch (e) {}
+    return Number(s1.replace(".", "")) * Number(s2.replace(".", "")) / Math.pow(10, m);
+  }
+
+  /**
+   * @description 计算两个小数相除
+   * @param currentNum
+   * @param targetNum
+   * @returns {number}
+   */
+  divisionFloatNumber(currentNum, targetNum){
+    let t1 = 0, t2 = 0, r1, r2;
+    try {t1 = currentNum.toString().split(".")[1].length} catch (e) {}
+    try {t2 = targetNum.toString().split(".")[1].length} catch (e) {}
+    r1 = Number(currentNum.toString().replace(".", ""))
+    r2 = Number(targetNum.toString().replace(".", ""))
+    return (r1 / r2) * Math.pow(10, t2 - t1);
+  }
+
+
+
 }
 
 export default Helpers;
