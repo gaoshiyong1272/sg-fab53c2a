@@ -48,7 +48,7 @@ let helperObj = helper(defautlSetting);
 ```
 
 
-##### 版本说明
+#### 版本说明
 
 - 1.2.12 新增两个小数点数字加减乘除
  - addFloatNumber
