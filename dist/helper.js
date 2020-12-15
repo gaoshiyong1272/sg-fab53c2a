@@ -1384,11 +1384,238 @@ class helper_Helpers {
     return typeKey
   }
 
+  /**
+   * @description 判断俩个需要处理的数字谁的小数点后位数多，
+   * 以多的为准，值乘以10的小数位的幂数，相加以后，再除以10的小数位的幂数
+   * @param currentNum
+   * @param targetNum
+   */
+  checkFloatMore(currentNum, targetNum){
+    let sq1, sq2;
+    try {sq1 = currentNum.toString().split(".")[1].length;}
+    catch (e) {sq1 = 0;}
+    try {sq2 = targetNum.toString().split(".")[1].length;}
+    catch (e) {sq2 = 0;}
+    return Math.pow(10, Math.max(sq1, sq2));
+  }
+
+  /**
+   * @description 两个小数相加
+   * @param currentNum
+   * @param targetNum
+   * @return number
+   */
+  addFloatNumber(currentNum, targetNum){
+    let power = this.checkFloatMore(currentNum, targetNum);
+    return (currentNum * power + targetNum * power) / power;
+  }
+
+  /**
+   * @description 两个小数减
+   * @param currentNum
+   * @param targetNum
+   * @return number
+   */
+  cutFloatNumber(currentNum, targetNum) {
+    let power = this.checkFloatMore(currentNum, targetNum);
+    return (currentNum * power - targetNum * power) / power;
+  }
+
+  /**
+   * @description 计算两个小数相乘
+   * @param currentNum
+   * @param targetNum
+   * @returns {number}
+   */
+  multiplyFloatNumber(currentNum, targetNum){
+    let m = 0, s1 = currentNum.toString(), s2 = targetNum.toString();
+    try {m += s1.split(".")[1].length;} catch (e) {}
+    try {m += s2.split(".")[1].length;} catch (e) {}
+    return Number(s1.replace(".", "")) * Number(s2.replace(".", "")) / Math.pow(10, m);
+  }
+
+  /**
+   * @description 计算两个小数相除
+   * @param currentNum
+   * @param targetNum
+   * @returns {number}
+   */
+  divisionFloatNumber(currentNum, targetNum){
+    let t1 = 0, t2 = 0, r1, r2;
+    try {t1 = currentNum.toString().split(".")[1].length} catch (e) {}
+    try {t2 = targetNum.toString().split(".")[1].length} catch (e) {}
+    r1 = Number(currentNum.toString().replace(".", ""))
+    r2 = Number(targetNum.toString().replace(".", ""))
+    return (r1 / r2) * Math.pow(10, t2 - t1);
+  }
+
+
+
 }
 
 /* harmony default export */ var helper = (helper_Helpers);
 
+// CONCATENATED MODULE: ./src/uitls/regExps.js
+
+class RegExps {
+  constructor() {
+    this.regChinese = '([\u4E00-\uFA29]|[\uE7C7-\uE7F3])';
+    this.letter = '[a-zA-Z]';
+    this.letterD = '[A-Z]';
+    this.num = '[0-9]';
+    this.email = new RegExp("^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$");
+    this.regChineseAndLetter = "([\u4E00-\uFA29]|[\uE7C7-\uE7F3]|[a-zA-Z])";
+    this.numberAndletter = "([0-9]|[a-zA-Z])";
+    this.character = "(\.)";
+    this.rankname = "([a-zA-Z0-9\.])";
+  }
+
+  /**
+   * @description 获取任意长度数字和大小写字母
+   * @returns {RegExp}
+   */
+  getAnyNumAndLetter() {
+    return new RegExp(`^${this.numberAndletter}*$`);
+  }
+
+  /**
+   * @description 获取固定长度数字和大小写字母
+   * @returns {RegExp}
+   */
+  getFixedLenNumAndLetter(min = 0, max = 10) {
+    return new RegExp(`^${this.numberAndletter}{${min},${max}}$`);
+  }
+
+  /**
+   * @description 获取固定长度任意字符集正则
+   * @param min
+   * @param max
+   * @returns {RegExp}
+   */
+  getFixedLenChar(min = 0, max = 10) {
+    return new RegExp(`^${this.character}{${min},${max}}$`);
+  }
+
+  /**
+   * @description 获取固定长度大小写字母和点正则
+   * @param min
+   * @param max
+   * @returns {RegExp}
+   */
+  getRank(min = 0, max = 10) {
+    return new RegExp(`^${this.rankname}{${min},${max}}$`);
+  }
+
+  /**
+   * @description 电话正则
+   * @param min
+   * @param max
+   * @returns {RegExp}
+   */
+  getTel(min = 7, max = 20) {
+    return new RegExp(`^${this.num}{${min},${max}}$`);
+  }
+
+  /**
+   * @description 获取固定长度大小写字母正则
+   * @param min
+   * @param max
+   * @returns {RegExp}
+   */
+  getFixedLenLetter(min = 0, max = 10) {
+    return new RegExp(`^${this.letter}{${min},${max}}$`);
+  }
+
+  /**
+   * @description 获取固定长度大写字母正则
+   * @param min
+   * @param max
+   * @returns {RegExp}
+   */
+  getFixedLenUppercaseLetter(min = 0, max = 10) {
+    return new RegExp(`^${this.letterD}{${min},${max}}$`);
+  }
+
+  /**
+   * @description 获取固定长度数字长度正则
+   * @param min
+   * @param max
+   * @returns {RegExp}
+   */
+  getFixedLenNumber(min = 0, max = 10) {
+    return new RegExp(`^${this.num}{${min},${max}}$`);
+  }
+
+  /**
+   * @description 获取任意长度数字正则
+   * @returns {RegExp}
+   */
+  getAnyLenNumber() {
+    return new RegExp(`^${this.num}*$`);
+  }
+
+  /**
+   * @description 获取邮件正则表达式
+   * @returns {RegExp}
+   */
+  getEmail() {
+    return this.email;
+  }
+
+  /**
+   * @description 获取固定长度汉字正则
+   * @param min
+   * @param max
+   * @returns {RegExp}
+   */
+  getFixedLenChinese(min = 0, max = 10) {
+    return new RegExp(`^${this.regChinese}{${min},${max}}$`);
+  }
+
+  /**
+   * @description 获取固定长度汉字与字母长度正则
+   * @param min
+   * @param max
+   * @returns {RegExp}
+   */
+  getFixedLenChineseAndLetter(min, max) {
+    return new RegExp(`^${this.regChineseAndLetter}{${min},${max}}$`);
+  };
+
+  /**
+   * @description 获取网络地址文件名称
+   * @example getUpdateFileNmae('https://admin.jufubao.cn/index.html'); => index.html
+   * @param url
+   * @returns {null|*}
+   */
+  getUrlForFileNmae(url) {
+    let reg = /^(http:\/\/|https:\/\/|\/\/)(.*)(\/((.*)\.(.*)))$/;
+    let match = url.match(reg);
+    if (!match) {
+      return null;
+    }
+    console.log('getUpdateFileNmae', match[4]);
+    return match[4];
+  }
+
+  /***
+   * @description 检查是否为网络地址
+   * @param url
+   * @returns {boolean}
+   */
+  validURL(url){
+    const reg = /^(https?|ftp):\/\/([a-zA-Z0-9.-]+(:[a-zA-Z0-9.&%$-]+)*@)*((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]?)(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}|([a-zA-Z0-9-]+\.)*[a-zA-Z0-9-]+\.(com|edu|gov|int|mil|net|org|biz|arpa|info|name|pro|aero|coop|museum|[a-zA-Z]{2}))(:[0-9]+)*(\/($|[a-zA-Z0-9.,?'\\+&%$#=~_-]+))*$/
+    return reg.test(url)
+  }
+
+}
+
+/* harmony default export */ var regExps = (new RegExps());
+
 // CONCATENATED MODULE: ./src/index.js
+
+
+
 
 
 
@@ -1405,13 +1632,15 @@ if (typeof window !== 'undefined') {
   window['xdCookie'] = uitls_cookie;
   window['xdStorage'] = storage;
   window['xdPinyin'] = pinyin;
+  window['xdRegExps'] = regExps;
 }
 
 /* harmony default export */ var src = __webpack_exports__["default"] = ({
   cookie: uitls_cookie,
   storage: storage,
   pinyin: pinyin,
-  helper: src_helper
+  helper: src_helper,
+  regExps: regExps
 });
 
 
