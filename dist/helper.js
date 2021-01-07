@@ -1449,6 +1449,84 @@ class helper_Helpers {
     return (r1 / r2) * Math.pow(10, t2 - t1);
   }
 
+  /**
+   * @description 去掉左边指定字符串
+   * @param str
+   * @param replaceStr
+   * @returns {string}
+   */
+  tirmL(str = '', replaceStr = ',') {
+    if (!str || this.checkVarType(str) !== 'string') {
+      return str;
+    }
+    let homeReg = new RegExp(`^(${replaceStr})(.+)$`);
+    let homeMatchStr = str.match(homeReg);
+    if (homeMatchStr) str = homeMatchStr[2];
+    return str;
+  }
+
+  /**
+   * @description 去掉右边指定字符串
+   * @param str
+   * @param replaceStr
+   * @returns {string}
+   */
+  tirmR(str = '', replaceStr = ',') {
+    if (!str || this.checkVarType(str) !== 'string') {
+      return str;
+    }
+    let endReg = new RegExp(`^(.+)(${replaceStr})$`);
+    let endMatchStr = str.match(endReg);
+    if (endMatchStr) str = endMatchStr[1];
+    return str;
+  }
+
+  /**
+   * @description 去掉两部指定字符串
+   * @param str
+   * @param replaceStr
+   * @return {string}
+   */
+  tirm(str = '', replaceStr = ',') {
+    str = this.tirmL(str, replaceStr);
+    str = this.tirmR(str, replaceStr);
+    return str;
+  }
+
+  /**
+   * @description 搜索到匹配关键字高亮处理
+   * @param str {string} 需要检索的字符串
+   * @param keyword {string|array} 搜索关键字
+   * @param options {object}
+   * @param options.tag 有效的html中有效的tag标签
+   * @param options.color 匹配的字符高亮颜色 默认：red
+   * @param options.weight
+   * ，css font-weight有效值，默认：normal
+   * @returns {*}
+   */
+  searchHigh(str, keyword, options = {}) {
+    try {
+      let __option = {
+        tag: 'span',
+        color: 'red',
+        weight: 'normal',
+      };
+      if (this.checkVarType(keyword) === 'array') {
+        keyword = keyword.join('|');
+      } else if (this.checkVarType(keyword) === 'string') {
+        keyword = keyword.trim();
+      } else {
+        throw new Error('关键字类型错误')
+      }
+      let opt = Object.assign({}, __option, options);
+      let reg = new RegExp(`(${keyword})`, 'ig');
+      return str.replace(reg, `<${opt.tag} style="color:${opt.color};font-weight: ${opt.weight}">$1</${opt.tag}>`);
+    } catch (e) {
+      console.error(e)
+      return str;
+    }
+  }
+
 
 
 }

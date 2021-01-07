@@ -1,6 +1,6 @@
 {
   "name": "gxd-helper",
-  "version": "1.2.12",
+  "version": "1.2.13",
   "description": "自定义工具类和工具函数",
   "main": "index.js",
   "scripts": {
@@ -14,7 +14,12 @@
   "keywords": [
     "gxd",
     "gxd-helper",
+    "helper",
     "utils",
+    "tirm",
+    "float number",
+    "search high",
+    "cloneDeep",
     "工具类函数",
     "Tools"
   ],
