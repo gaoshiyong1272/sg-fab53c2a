@@ -48,10 +48,58 @@ let helperObj = helper(defautlSetting);
 ```
 
 
-#### 版本说明
+#### 常用方法
+```text
+#helper 工具类
+ - checkVarType(obj:Any) //判断变量类型 返回字符串(boolean|number|string|function|array|date|regExp|undefined|null|object)
+ - cloneDeep(json:Object) //简单深拷贝
+ - random(min:Number, max:Number) //随机数字值
+ - romdomArray(arr:Arrar = []) //随机数组的值
+ - getTime(lastDay:Number = 30) //获取最近某时间断内的时间
+ - inArray(sourceArray:Array = [], findArray:Array = []) 检测查找数组是否在原数组中,返回boolean
+ - repeatArray(sourceArray:Array = [], findArray:Array = []) 数组去重复
+ - unionArray(sourceArray:Array = [], findArray:Array = []) 数组并集
+ - intersectionArray(sourceArray:Array = [], findArray:Array = []) 数组交集
+ - differenceArray(sourceArray:Array = [], findArray:Array = []) 数组差集
+ - isEmpty(obj:Array|Object) 检查对象或者数组是否为空,返回boolean
+ - idToSelectData(data:Array|Object, name:String = 'name', id:String = 'id', force:Boolean = true) 转化为vue element UI选择插件数据格式（{value: 'value' ,label: 'label'}）
+ - isKeyInLists(list:Array|Object, value:Any, keyName:String='id') 检查值是否在数组中或者对象中并返回结果
+ - getListKeyForValue(list:Array|Object, keyName:String = 'id') 获取数组或者对象中的某个key的value值
+ - deleteParamEmptyKey(source:Object, ignoreKey:Array = []) 删除参数中[all|''|null|undefined] ignoreKey被忽略的Key
+ - paramsBase64Decode(base64Str:String) //把Base64转化为对象
+ - paramsBase64Encode(row:Object) //把对象转化为可传输的Url Base64安全格式
+ - jsonToParams(params:String) //把对象解析成请求参数格式
+ - cutStringLen(val:String, len:Number = 10) //截断字符串长短（汉字2个字符串，英文1个）
+ - parseURL(url:String?) //解析链接地址 或者 获取当前url地址
+ - getParmater(key:String)  //获取Url参数
+ - addFloatNumber(currentNum:Number, targetNum:Number) //浮点型加法
+ - cutFloatNumber(currentNum:Number, targetNum:Number) //浮点型减法
+ - multiplyFloatNumber(currentNum:Number, targetNum:Number) //浮点型乘法
+ - divisionFloatNumber(currentNum:Number, targetNum:Number) //浮点型除法
+ - tirmL(str:String, replaceStr:String?) //去掉左边指定字符
+ - tirmR(str:String, replaceStr:String?) //去掉右边指定字符串
+ - tirm(str:String, replaceStr:String?) //去掉两部指定字符串
+ - searchHigh(str:String, keyword:String|Array, options:Object? = {}) //搜索到匹配关键字高亮处理
 
-- 1.2.12 新增两个小数点数字加减乘除
- - addFloatNumber
- - cutFloatNumber
- - multiplyFloatNumber
- - divisionFloatNumber
+#cookie
+ - get(key:String, options:Object) //获取cookie
+ - remove(key:String, options:Object) //删除指定键值所对应的cookie值
+ - set(key:String, value:String, options:Object={domain,path,expires}) //添加指定名称cookie值 , 过期时间小时制
+
+#Pinyin 汉语转拼音
+ - getfullName(str:String) //获取全部拼音
+ - getFirstLetter(str:String) //获取汉字的拼音首字母 汉英混排的时候汉语与英语之间使用"空格"隔开
+
+#storage 本地缓存（sessionStore，localStore）
+1. storage.sessionStore
+ - set(key:String, value:Any) //设置LocalStorage值
+ - get(key:String) //获取LocalStorage值
+ - remove(key:String) //删除LocalStorage值
+
+2. storage.localStore
+ - set(key:String, value:Any, expire:Number) //设置LocalStorage值
+ - get(key:String) //获取LocalStorage值
+ - remove(key:String) //删除LocalStorage值
+
+```
+

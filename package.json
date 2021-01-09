@@ -1,6 +1,6 @@
 {
   "name": "gxd-helper",
-  "version": "1.2.13",
+  "version": "1.2.14",
   "description": "自定义工具类和工具函数",
   "main": "index.js",
   "scripts": {
@@ -20,8 +20,14 @@
     "float number",
     "search high",
     "cloneDeep",
+    "tools",
+    "parseURL",
+    "array",
+    "check var",
+    "float calculate",
+    "浮点型计算",
     "工具类函数",
-    "Tools"
+    "常用工具类"
   ],
   "author": "gaoshiyong1272@vip.163.com",
   "license": "ISC",

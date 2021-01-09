@@ -68,7 +68,7 @@ class Helpers {
   }
 
   /**
-   * @description 数据数组的值
+   * @description 随机数组的值
    * @param arr {Array}
    */
   romdomArray(arr = []) {
@@ -313,7 +313,7 @@ class Helpers {
   }
 
   /**
-   * @deprecated 检查值是否在数组中或者对象中
+   * @deprecated 检查值是否在数组中或者对象中并返回结果
    * @param list
    * @param value
    * @param keyName
@@ -370,7 +370,7 @@ class Helpers {
   }
 
   /**
-   * @description 删除参数中[all|'']
+   * @description 删除参数中[all|''|null|undefined]
    * @param source
    * @param ignoreKey 忽略的key
    */
@@ -379,7 +379,7 @@ class Helpers {
     this.forEach(data, (key) => {
       if(ignoreKey.length > 0) {
         if(!this.inArray(ignoreKey,[key])) {
-          if (data[key] === 'all' || data[key] === '') {
+          if (data[key] === 'all' || data[key] === '' || data[key] === null  || data[key] === undefined ) {
             delete data[key];
           }
         }
