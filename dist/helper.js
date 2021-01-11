@@ -1527,6 +1527,76 @@ class helper_Helpers {
     }
   }
 
+  /**
+   * @description 加载js文件
+   * @param src
+   * @param done
+   */
+  sripts(src, done) {
+    const s = document.createElement('script');
+    s.type = 'text/javascript';
+    s.src = src;
+    document.body.appendChild(s);
+    s.onload = () => {
+      done();
+    }
+  }
+
+  /**
+   * @description 加载js|css文件
+   * @param arr {string|array} js地址 ['http://www.xxx.com/xxx.js'] | 'http://www.xxx.com/xxx.js'
+   * @param type {string} // type=css|js
+   * @return {Promise}
+   */
+  loadFile(arr, type = 'js') {
+    let loader = [];
+    if (this.checkVarType(arr) === 'string' || this.checkVarType(arr) === 'array') {
+      if (this.checkVarType(arr) === 'string') {
+        arr = [arr];
+      }
+      let len = arr.length;
+      return new Promise((resolve) => {
+        arr.map((value) => {
+          let fnName = 'sripts';
+          if (type === 'css') {
+            fnName = 'css';
+          }
+          this[fnName](value, () => {
+            loader.push(value);
+            if (len === loader.length) {
+              resolve(loader);
+            }
+          })
+        });
+      });
+    } else {
+      console.error('传入的参数格式错误', arr);
+      throw Error('传入的参数格式错误');
+      return new Promise((resolve, reject) => {
+        reject('传入的参数格式错误')
+      });
+    }
+
+  }
+
+  /**
+   * @description 加载文件
+   * @param url
+   * @param done
+   */
+  css(url, done) {
+    let ele = document.createElement('link');
+    ele.type = "text/css";
+    ele.rel = "stylesheet";
+    ele.href = url;
+    document.head.appendChild(ele);
+    ele.onload = () => {
+      setTimeout(() => {
+        done();
+      }, 500);
+    }
+  }
+
 
 
 }

@@ -50,7 +50,7 @@ let helperObj = helper(defautlSetting);
 
 #### 常用方法
 ```text
-#helper 工具类
+#helper 工具类 （v1.12.14）
  - checkVarType(obj:Any) //判断变量类型 返回字符串(boolean|number|string|function|array|date|regExp|undefined|null|object)
  - cloneDeep(json:Object) //简单深拷贝
  - random(min:Number, max:Number) //随机数字值
@@ -81,16 +81,16 @@ let helperObj = helper(defautlSetting);
  - tirm(str:String, replaceStr:String?) //去掉两部指定字符串
  - searchHigh(str:String, keyword:String|Array, options:Object? = {}) //搜索到匹配关键字高亮处理
 
-#cookie
+#cookie （v1.12.14）
  - get(key:String, options:Object) //获取cookie
  - remove(key:String, options:Object) //删除指定键值所对应的cookie值
  - set(key:String, value:String, options:Object={domain,path,expires}) //添加指定名称cookie值 , 过期时间小时制
 
-#Pinyin 汉语转拼音
+#Pinyin 汉语转拼音 （v1.12.14）
  - getfullName(str:String) //获取全部拼音
  - getFirstLetter(str:String) //获取汉字的拼音首字母 汉英混排的时候汉语与英语之间使用"空格"隔开
 
-#storage 本地缓存（sessionStore，localStore）
+#storage 本地缓存（sessionStore，localStore） （v1.12.14）
 1. storage.sessionStore
  - set(key:String, value:Any) //设置LocalStorage值
  - get(key:String) //获取LocalStorage值
@@ -102,4 +102,11 @@ let helperObj = helper(defautlSetting);
  - remove(key:String) //删除LocalStorage值
 
 ```
+
+#### 版本日志
+```text
+#helper 工具类 (v1.1.15)
+ - loadFile(arr:Array|String, type:String = 'js|css') //加载js和css文件
+```
+
 
