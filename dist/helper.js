@@ -1597,6 +1597,22 @@ class helper_Helpers {
     }
   }
 
+  /**
+   * @description 过滤html标签
+   * @param html html文本
+   * @param allowed 允许通过的标签 例如：'<p><a><li>'
+   * @returns {string|XML}
+   */
+  filterHtml(html, allowed) {
+    allowed = allowed == undefined ? '' : allowed;
+    allowed = (((allowed || "") + "").toLowerCase().match(/<[a-z][a-z0-9]*>/g) || []).join('');
+    let tags = /<\/?([a-z][a-z0-9]*)\b[^>]*>/gi,
+      commentsAndPhpTags = /<!--[\s\S]*?-->|<\?(?:php)?[\s\S]*?\?>/gi;
+    return html.replace(commentsAndPhpTags, '').replace(tags, function ($0, $1) {
+      return allowed.indexOf('<' + $1.toLowerCase() + '>') > -1 ? $0 : '';
+    });
+  };
+
 
 
 }
@@ -1769,13 +1785,26 @@ class RegExps {
 
 
 
-
-
 const src_helper= (setting) =>{
   return new helper(setting)
 };
 
-if (typeof window !== 'undefined') {
+const install = function (Vue, setting) {
+  if (install.installed) return;
+  install.installed = true;
+  Vue.prototype.$helper = src_helper(setting);
+  Vue.prototype.$xdHelper = src_helper(setting);
+  Vue.prototype.$xdCookie = uitls_cookie;
+  Vue.prototype.$xdStorage = storage;
+  Vue.prototype.$xdRegExps = regExps;
+  Vue.prototype.$xdPinyin = pinyin;
+  console.log('初始化成功！','Vue.use(gxd-helper)=> options', setting);
+
+};
+
+//浏览器使用
+if (typeof window !== 'undefined' && window['Vue']) {
+  install(window['Vue'])
   window['xdHelper'] = src_helper;
   window['xdCookie'] = uitls_cookie;
   window['xdStorage'] = storage;
@@ -1783,12 +1812,14 @@ if (typeof window !== 'undefined') {
   window['xdRegExps'] = regExps;
 }
 
+
 /* harmony default export */ var src = __webpack_exports__["default"] = ({
   cookie: uitls_cookie,
   storage: storage,
   pinyin: pinyin,
   helper: src_helper,
-  regExps: regExps
+  regExps: regExps,
+  install,
 });
 
 

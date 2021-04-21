@@ -107,6 +107,13 @@ let helperObj = helper(defautlSetting);
 ```text
 #helper 工具类 (v1.1.15)
  - loadFile(arr:Array|String, type:String = 'js|css') //加载js和css文件
+
+#helper 工具类 (v1.1.16)
+ - filterHtml(html:String, allowed:String) 过滤所有标签并希望保留'<a><p>'标签 , 使用如下：filterHtml(html, '<a><p>');
+
+#xd-helper (v2.0.1)
+ - 备注：修改插件加载方式
+
 ```
 
 
