@@ -1407,7 +1407,7 @@ class helper_Helpers {
    */
   addFloatNumber(currentNum, targetNum){
     let power = this.checkFloatMore(currentNum, targetNum);
-    return (currentNum * power + targetNum * power) / power;
+    return (this.multiplyFloatNumber(currentNum, power) + this.multiplyFloatNumber(targetNum, power )) / power;
   }
 
   /**
@@ -1418,7 +1418,7 @@ class helper_Helpers {
    */
   cutFloatNumber(currentNum, targetNum) {
     let power = this.checkFloatMore(currentNum, targetNum);
-    return (currentNum * power - targetNum * power) / power;
+    return (this.multiplyFloatNumber(currentNum, power) - this.multiplyFloatNumber(targetNum, power)) / power;
   }
 
   /**

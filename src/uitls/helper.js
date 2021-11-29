@@ -687,7 +687,7 @@ class Helpers {
    */
   addFloatNumber(currentNum, targetNum){
     let power = this.checkFloatMore(currentNum, targetNum);
-    return (currentNum * power + targetNum * power) / power;
+    return (this.multiplyFloatNumber(currentNum, power) + this.multiplyFloatNumber(targetNum, power )) / power;
   }
 
   /**
@@ -698,7 +698,7 @@ class Helpers {
    */
   cutFloatNumber(currentNum, targetNum) {
     let power = this.checkFloatMore(currentNum, targetNum);
-    return (currentNum * power - targetNum * power) / power;
+    return (this.multiplyFloatNumber(currentNum, power) - this.multiplyFloatNumber(targetNum, power)) / power;
   }
 
   /**
@@ -726,7 +726,7 @@ class Helpers {
     try {t2 = targetNum.toString().split(".")[1].length} catch (e) {}
     r1 = Number(currentNum.toString().replace(".", ""))
     r2 = Number(targetNum.toString().replace(".", ""))
-    return (r1 / r2) * Math.pow(10, t2 - t1);
+    return this.multiplyFloatNumber(r1 / r2, Math.pow(10, t2 - t1));
   }
 
   /**
