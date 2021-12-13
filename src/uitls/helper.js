@@ -317,21 +317,30 @@ class Helpers {
    * @param list
    * @param value
    * @param keyName
+   * @param strict 是否严格判断
    * @example
    * [{id: 1,name:'gao'},{id: 2,name:'wu'}]
    * OR
    * {'1':{id: 1,name:'gao'},'2':{id: 2,name:'wu'}}
    * @return []
    */
-  isKeyInLists(list, value, keyName='id'){
+  isKeyInLists(list, value, keyName='id', strict = false){
     let items = null;
     if(this.checkVarType(list) === 'array'
       || this.checkVarType(list) === 'object'
     ){
       this.forEach(list,(index)=>{
         let item = list[index];
-        if(String(value) === String(list[index][keyName])) {
-          items = item;
+        //严格判断
+        if (strict) {
+          if (value === list[index][keyName]) {
+            items = item;
+          }
+          //松散判断
+        } else {
+          if (value == list[index][keyName]) {
+            items = item;
+          }
         }
       });
       return items;
@@ -341,6 +350,31 @@ class Helpers {
       throw new Error('只支持数组与JSON对象格式');
 
     }
+  }
+
+  /**
+   * @description 查询列表某组值并返回值
+   * @param list
+   * @param values
+   * @param findKey
+   * @param strict 是否严格判断
+   *
+   * @returns {[]}
+   */
+  getValuesForList( list, values = [], findKey = 'value', strict = true) {
+    let temp = [];
+    //对象与数组处理
+    if (this.checkVarType(list) === 'object' ||
+      this.checkVarType(list) === 'array'
+    ) {
+      values.map((val) => {
+        let item = this.isKeyInLists(list, val, findKey, strict);
+        if (item !== null) temp.push(item);
+      })
+    } else {
+      console.error('数据类型错误')
+    }
+    return temp;
   }
 
   /**
@@ -488,8 +522,9 @@ class Helpers {
    * @description 字符串截取
    * @param val
    * @param len
+   * @param useType {String} 返回值类型 默认：''=>返回截取字符串  len=> 返回字符串长度
    */
-  cutStringLen(val, len = 10) {
+  cutStringLen(val, len = 10, useType='') {
     let fix = '...';
     let newLength = 0;
     let newStr = "";
@@ -510,6 +545,10 @@ class Helpers {
     }
     if (strLength > len) {
       newStr += fix;
+    }
+
+    if (useType === 'len') {
+      return newLength
     }
     return newStr;
   }
@@ -893,6 +932,20 @@ class Helpers {
     });
   };
 
+  /**
+   * @description 获取随机字符串
+   * @param len {number}
+   * @returns {string}
+   */
+  randomChar(len) {
+    let arrstring = 'qwertyuiopasdfghjklzxcvbnm123456789QWERTYUIOPASDFGHJKLZXCVBNM'.split('');
+    let str = '';
+    for (let i = 0; i < len; i++) {
+      let index = this.random(0, arrstring.length - 1);
+      str += arrstring[index];
+    }
+    return str;
+  }
 
 
 }
