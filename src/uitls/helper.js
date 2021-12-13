@@ -68,7 +68,7 @@ class Helpers {
   }
 
   /**
-   * @description 数据数组的值
+   * @description 随机数组的值
    * @param arr {Array}
    */
   romdomArray(arr = []) {
@@ -271,8 +271,9 @@ class Helpers {
    * @param data 原始数据
    * @param name 指定Name key
    * @param id 指定Name kei
+   * @param force 字符串数字id是否强制转换数字类型
    */
-  idToSelectData(data, name = 'name', id = 'id') {
+  idToSelectData(data, name = 'name', id = 'id', force = true) {
 
     if (this.checkVarType(data) !== 'array') {
       console.log('idToSelectData() Data type not array', data);
@@ -287,13 +288,19 @@ class Helpers {
       let item = this.cloneDeep(data[index]);
       let numId = item[id];
       if (numId !== '') {
+
         //字符串数字id转number
-        if (this.checkVarType(item[id]) === 'string' && regNumber.test(item[id])) {
+        if (force && this.checkVarType(item[id]) === 'string' && regNumber.test(item[id])) {
           numId = parseInt(item[id]);
         }
+        if(force) {
+          item['id'] = numId;
+          item['key'] = numId;
+        }else {
+          if (!item['id']) item['id'] = numId;
+          if (!item['key']) item['key'] = numId;
+        }
 
-        item['id'] = numId;
-        item['key'] = numId;
         item['value'] = numId;
         item['label'] = item[name];
         item['fullname'] = pinyin.getfullName(item[name]);
@@ -306,25 +313,34 @@ class Helpers {
   }
 
   /**
-   * @deprecated 检查值是否在数组中或者对象中
+   * @deprecated 检查值是否在数组中或者对象中并返回结果
    * @param list
    * @param value
    * @param keyName
+   * @param strict 是否严格判断
    * @example
    * [{id: 1,name:'gao'},{id: 2,name:'wu'}]
    * OR
    * {'1':{id: 1,name:'gao'},'2':{id: 2,name:'wu'}}
    * @return []
    */
-  isKeyInLists(list, value, keyName='id'){
+  isKeyInLists(list, value, keyName='id', strict = false){
     let items = null;
     if(this.checkVarType(list) === 'array'
       || this.checkVarType(list) === 'object'
     ){
       this.forEach(list,(index)=>{
         let item = list[index];
-        if(String(value) === String(list[index][keyName])) {
-          items = item;
+        //严格判断
+        if (strict) {
+          if (value === list[index][keyName]) {
+            items = item;
+          }
+          //松散判断
+        } else {
+          if (value == list[index][keyName]) {
+            items = item;
+          }
         }
       });
       return items;
@@ -334,6 +350,31 @@ class Helpers {
       throw new Error('只支持数组与JSON对象格式');
 
     }
+  }
+
+  /**
+   * @description 查询列表某组值并返回值
+   * @param list
+   * @param values
+   * @param findKey
+   * @param strict 是否严格判断
+   *
+   * @returns {[]}
+   */
+  getValuesForList( list, values = [], findKey = 'value', strict = true) {
+    let temp = [];
+    //对象与数组处理
+    if (this.checkVarType(list) === 'object' ||
+      this.checkVarType(list) === 'array'
+    ) {
+      values.map((val) => {
+        let item = this.isKeyInLists(list, val, findKey, strict);
+        if (item !== null) temp.push(item);
+      })
+    } else {
+      console.error('数据类型错误')
+    }
+    return temp;
   }
 
   /**
@@ -363,7 +404,7 @@ class Helpers {
   }
 
   /**
-   * @description 删除参数中[all|'']
+   * @description 删除参数中[all|''|null|undefined]
    * @param source
    * @param ignoreKey 忽略的key
    */
@@ -372,7 +413,7 @@ class Helpers {
     this.forEach(data, (key) => {
       if(ignoreKey.length > 0) {
         if(!this.inArray(ignoreKey,[key])) {
-          if (data[key] === 'all' || data[key] === '') {
+          if (data[key] === 'all' || data[key] === '' || data[key] === null  || data[key] === undefined ) {
             delete data[key];
           }
         }
@@ -481,8 +522,9 @@ class Helpers {
    * @description 字符串截取
    * @param val
    * @param len
+   * @param useType {String} 返回值类型 默认：''=>返回截取字符串  len=> 返回字符串长度
    */
-  cutStringLen(val, len = 10) {
+  cutStringLen(val, len = 10, useType='') {
     let fix = '...';
     let newLength = 0;
     let newStr = "";
@@ -503,6 +545,10 @@ class Helpers {
     }
     if (strLength > len) {
       newStr += fix;
+    }
+
+    if (useType === 'len') {
+      return newLength
     }
     return newStr;
   }
@@ -656,6 +702,251 @@ class Helpers {
     console.log('routeArr', typeKey, index);
     return typeKey
   }
+
+  /**
+   * @description 判断俩个需要处理的数字谁的小数点后位数多，
+   * 以多的为准，值乘以10的小数位的幂数，相加以后，再除以10的小数位的幂数
+   * @param currentNum
+   * @param targetNum
+   */
+  checkFloatMore(currentNum, targetNum){
+    let sq1, sq2;
+    try {sq1 = currentNum.toString().split(".")[1].length;}
+    catch (e) {sq1 = 0;}
+    try {sq2 = targetNum.toString().split(".")[1].length;}
+    catch (e) {sq2 = 0;}
+    return Math.pow(10, Math.max(sq1, sq2));
+  }
+
+  /**
+   * @description 两个小数相加
+   * @param currentNum
+   * @param targetNum
+   * @return number
+   */
+  addFloatNumber(currentNum, targetNum){
+    let power = this.checkFloatMore(currentNum, targetNum);
+    return (this.multiplyFloatNumber(currentNum, power) + this.multiplyFloatNumber(targetNum, power )) / power;
+  }
+
+  /**
+   * @description 两个小数减
+   * @param currentNum
+   * @param targetNum
+   * @return number
+   */
+  cutFloatNumber(currentNum, targetNum) {
+    let power = this.checkFloatMore(currentNum, targetNum);
+    return (this.multiplyFloatNumber(currentNum, power) - this.multiplyFloatNumber(targetNum, power)) / power;
+  }
+
+  /**
+   * @description 计算两个小数相乘
+   * @param currentNum
+   * @param targetNum
+   * @returns {number}
+   */
+  multiplyFloatNumber(currentNum, targetNum){
+    let m = 0, s1 = currentNum.toString(), s2 = targetNum.toString();
+    try {m += s1.split(".")[1].length;} catch (e) {}
+    try {m += s2.split(".")[1].length;} catch (e) {}
+    return Number(s1.replace(".", "")) * Number(s2.replace(".", "")) / Math.pow(10, m);
+  }
+
+  /**
+   * @description 计算两个小数相除
+   * @param currentNum
+   * @param targetNum
+   * @returns {number}
+   */
+  divisionFloatNumber(currentNum, targetNum){
+    let t1 = 0, t2 = 0, r1, r2;
+    try {t1 = currentNum.toString().split(".")[1].length} catch (e) {}
+    try {t2 = targetNum.toString().split(".")[1].length} catch (e) {}
+    r1 = Number(currentNum.toString().replace(".", ""))
+    r2 = Number(targetNum.toString().replace(".", ""))
+    return this.multiplyFloatNumber(r1 / r2, Math.pow(10, t2 - t1));
+  }
+
+  /**
+   * @description 去掉左边指定字符串
+   * @param str
+   * @param replaceStr
+   * @returns {string}
+   */
+  tirmL(str = '', replaceStr = ',') {
+    if (!str || this.checkVarType(str) !== 'string') {
+      return str;
+    }
+    let homeReg = new RegExp(`^(${replaceStr})(.+)$`);
+    let homeMatchStr = str.match(homeReg);
+    if (homeMatchStr) str = homeMatchStr[2];
+    return str;
+  }
+
+  /**
+   * @description 去掉右边指定字符串
+   * @param str
+   * @param replaceStr
+   * @returns {string}
+   */
+  tirmR(str = '', replaceStr = ',') {
+    if (!str || this.checkVarType(str) !== 'string') {
+      return str;
+    }
+    let endReg = new RegExp(`^(.+)(${replaceStr})$`);
+    let endMatchStr = str.match(endReg);
+    if (endMatchStr) str = endMatchStr[1];
+    return str;
+  }
+
+  /**
+   * @description 去掉两部指定字符串
+   * @param str
+   * @param replaceStr
+   * @return {string}
+   */
+  tirm(str = '', replaceStr = ',') {
+    str = this.tirmL(str, replaceStr);
+    str = this.tirmR(str, replaceStr);
+    return str;
+  }
+
+  /**
+   * @description 搜索到匹配关键字高亮处理
+   * @param str {string} 需要检索的字符串
+   * @param keyword {string|array} 搜索关键字
+   * @param options {object}
+   * @param options.tag 有效的html中有效的tag标签
+   * @param options.color 匹配的字符高亮颜色 默认：red
+   * @param options.weight
+   * ，css font-weight有效值，默认：normal
+   * @returns {*}
+   */
+  searchHigh(str, keyword, options = {}) {
+    try {
+      let __option = {
+        tag: 'span',
+        color: 'red',
+        weight: 'normal',
+      };
+      if (this.checkVarType(keyword) === 'array') {
+        keyword = keyword.join('|');
+      } else if (this.checkVarType(keyword) === 'string') {
+        keyword = keyword.trim();
+      } else {
+        throw new Error('关键字类型错误')
+      }
+      let opt = Object.assign({}, __option, options);
+      let reg = new RegExp(`(${keyword})`, 'ig');
+      return str.replace(reg, `<${opt.tag} style="color:${opt.color};font-weight: ${opt.weight}">$1</${opt.tag}>`);
+    } catch (e) {
+      console.error(e)
+      return str;
+    }
+  }
+
+  /**
+   * @description 加载js文件
+   * @param src
+   * @param done
+   */
+  sripts(src, done) {
+    const s = document.createElement('script');
+    s.type = 'text/javascript';
+    s.src = src;
+    document.body.appendChild(s);
+    s.onload = () => {
+      done();
+    }
+  }
+
+  /**
+   * @description 加载js|css文件
+   * @param arr {string|array} js地址 ['http://www.xxx.com/xxx.js'] | 'http://www.xxx.com/xxx.js'
+   * @param type {string} // type=css|js
+   * @return {Promise}
+   */
+  loadFile(arr, type = 'js') {
+    let loader = [];
+    if (this.checkVarType(arr) === 'string' || this.checkVarType(arr) === 'array') {
+      if (this.checkVarType(arr) === 'string') {
+        arr = [arr];
+      }
+      let len = arr.length;
+      return new Promise((resolve) => {
+        arr.map((value) => {
+          let fnName = 'sripts';
+          if (type === 'css') {
+            fnName = 'css';
+          }
+          this[fnName](value, () => {
+            loader.push(value);
+            if (len === loader.length) {
+              resolve(loader);
+            }
+          })
+        });
+      });
+    } else {
+      console.error('传入的参数格式错误', arr);
+      throw Error('传入的参数格式错误');
+      return new Promise((resolve, reject) => {
+        reject('传入的参数格式错误')
+      });
+    }
+
+  }
+
+  /**
+   * @description 加载文件
+   * @param url
+   * @param done
+   */
+  css(url, done) {
+    let ele = document.createElement('link');
+    ele.type = "text/css";
+    ele.rel = "stylesheet";
+    ele.href = url;
+    document.head.appendChild(ele);
+    ele.onload = () => {
+      setTimeout(() => {
+        done();
+      }, 500);
+    }
+  }
+
+  /**
+   * @description 过滤html标签
+   * @param html html文本
+   * @param allowed 允许通过的标签 例如：'<p><a><li>'
+   * @returns {string|XML}
+   */
+  filterHtml(html, allowed) {
+    allowed = allowed == undefined ? '' : allowed;
+    allowed = (((allowed || "") + "").toLowerCase().match(/<[a-z][a-z0-9]*>/g) || []).join('');
+    let tags = /<\/?([a-z][a-z0-9]*)\b[^>]*>/gi,
+      commentsAndPhpTags = /<!--[\s\S]*?-->|<\?(?:php)?[\s\S]*?\?>/gi;
+    return html.replace(commentsAndPhpTags, '').replace(tags, function ($0, $1) {
+      return allowed.indexOf('<' + $1.toLowerCase() + '>') > -1 ? $0 : '';
+    });
+  };
+
+  /**
+   * @description 获取随机字符串
+   * @param len {number}
+   * @returns {string}
+   */
+  randomChar(len) {
+    let arrstring = 'qwertyuiopasdfghjklzxcvbnm123456789QWERTYUIOPASDFGHJKLZXCVBNM'.split('');
+    let str = '';
+    for (let i = 0; i < len; i++) {
+      let index = this.random(0, arrstring.length - 1);
+      str += arrstring[index];
+    }
+    return str;
+  }
+
 
 }
 
