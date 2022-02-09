@@ -20,18 +20,23 @@ const install = function (Vue, setting) {
   Vue.prototype.$xdRegExps = regExps;
   Vue.prototype.$xdPinyin = pinyin;
   console.log('初始化成功！','Vue.use(gxd-helper)=> options', setting);
-
 };
 
 //浏览器使用
-if (typeof window !== 'undefined' && window['Vue']) {
-  install(window['Vue'])
+if (typeof window !== 'undefined') {
+  if(window['Vue']) {
+    install(window['Vue'])
+  }
   window['xdHelper'] = helper;
   window['xdCookie'] = cookie;
   window['xdStorage'] = storage;
   window['xdPinyin'] = pinyin;
   window['xdRegExps'] = regExps;
 }
+
+
+
+
 
 
 export default {

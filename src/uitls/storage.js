@@ -7,13 +7,13 @@ import {checkVarType} from './common';
  */
 class SessionStorage {
   constructor() {
-    this.regKey = /^[a-zA-Z_]+$/;
+    this.regKey = /^([0-9a-zA-Z_-]|\/|:|\.)+$/;
     this.store = window.sessionStorage ? window.sessionStorage : null;
   }
 
   check(key) {
     if (!this.store) throw "Browser don't support sessionStorage";
-    if (!this.regKey.test(key)) throw "Key the rules is error";
+    if (!this.regKey.test(key)) throw `Key the rules is error, key:${key}`;
   }
 
   /***
@@ -63,13 +63,32 @@ class SessionStorage {
  */
 class LocalStorage {
   constructor() {
-    this.regKey = /^[a-zA-Z_]+$/;
+    this.regKey = /^([0-9a-zA-Z_-]|\/|:|\.)+$/;
     this.store = window.localStorage ? window.localStorage : null;
+    this.keys = []; //键值
+    this.infoCount = 0; //检查keys是否次数
   }
+
+  getInfo(){
+    this.infoCount = 0;
+    this.keys = [];
+    this.handleGetInfo();
+    return this.keys;
+  }
+
+  handleGetInfo(){
+    let key = this.store.key(this.infoCount);
+    if(key) {
+      this.keys.push(key);
+      this.infoCount++;
+      this.handleGetInfo();
+    }
+  }
+
 
   check(key) {
     if (!this.store) throw "Browser don't support localStorage";
-    if (!this.regKey.test(key)) throw "Key the rules is error";
+    if (!this.regKey.test(key)) throw `Key the rules is error, key:${key}`;
   }
 
   getTime() {
@@ -82,7 +101,7 @@ class LocalStorage {
    * @param value { Object|Array|string }
    * @param expire {number} 小时单位
    */
-  set(key, value, expire) {
+  set(key, value, expire = 0) {
     this.check(key);
 
     /**数组与对象需要序列号**/
