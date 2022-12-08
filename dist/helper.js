@@ -462,7 +462,9 @@ function checkVarType(obj) {
     '[object RegExp]': 'regExp',
     '[object Undefined]': 'undefined',
     '[object Null]': 'null',
-    '[object Object]': 'object'
+    '[object Object]': 'object',
+    '[object Error]': 'error',
+    '[object Promise]': 'promise'
   };
   return map[toString.call(obj)];
 }
@@ -1158,7 +1160,7 @@ class helper_Helpers {
         }
       }
       else{
-        if (data[key] === 'all' || data[key] === '') {
+        if (data[key] === 'all' || data[key] === '' || data[key] === null || data[key] === undefined) {
           delete data[key];
         }
       }

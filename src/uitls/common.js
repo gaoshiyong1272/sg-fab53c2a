@@ -17,7 +17,9 @@ export function checkVarType(obj) {
     '[object RegExp]': 'regExp',
     '[object Undefined]': 'undefined',
     '[object Null]': 'null',
-    '[object Object]': 'object'
+    '[object Object]': 'object',
+    '[object Error]': 'error',
+    '[object Promise]': 'promise'
   };
   return map[toString.call(obj)];
 }

@@ -1,6 +1,6 @@
 {
   "name": "gxd-helper",
-  "version": "2.0.15",
+  "version": "2.0.17",
   "description": "自定义工具类和工具函数",
   "main": "index.js",
   "scripts": {

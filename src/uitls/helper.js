@@ -419,7 +419,7 @@ class Helpers {
         }
       }
       else{
-        if (data[key] === 'all' || data[key] === '') {
+        if (data[key] === 'all' || data[key] === '' || data[key] === null || data[key] === undefined) {
           delete data[key];
         }
       }
