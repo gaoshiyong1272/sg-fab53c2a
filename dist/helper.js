@@ -750,7 +750,7 @@ var base64 = __webpack_require__(1);
 
 class helper_Helpers {
 
-  constructor(setting){
+  constructor(setting) {
     this.setting = setting
   }
 
@@ -759,9 +759,9 @@ class helper_Helpers {
    * @param obj
    * @returns {*}
    */
-	checkVarType(obj){
+  checkVarType(obj) {
     return checkVarType(obj)
-	}
+  }
 
   /**
    * @description 获取最近某时间断内的时间
@@ -787,8 +787,8 @@ class helper_Helpers {
    * @param json
    * @returns {any}
    */
-  cloneDeep(json){
-    if(this.checkVarType(json) ==='object'
+  cloneDeep(json) {
+    if (this.checkVarType(json) === 'object'
       || this.checkVarType(json) === 'array'
     ) {
       return JSON.parse(JSON.stringify(json));
@@ -842,28 +842,27 @@ class helper_Helpers {
    * @param findArray 查找数组
    * @returns {boolean}
    */
-  inArray(sourceArray = [], findArray = []){
-    if(this.checkVarType(sourceArray) === 'array' &&
+  inArray(sourceArray = [], findArray = []) {
+    if (this.checkVarType(sourceArray) === 'array' &&
       this.checkVarType(findArray) === 'array'
-    ){
+    ) {
       let sourceArraylen = sourceArray.length;
       let find = this.cloneDeep(findArray);
       let temp = [];
       //console.log(findArray, sourceArray)
-      for(let i =0 ;i < sourceArraylen;i++) {
+      for (let i = 0; i < sourceArraylen; i++) {
         let sourceVal = sourceArray[i];
-        for( let k = 0 ; k < find.length; k++) {
-          if(find[k] === sourceVal) {
+        for (let k = 0; k < find.length; k++) {
+          if (find[k] === sourceVal) {
             temp.push(true);
-            find.splice(k,1);
+            find.splice(k, 1);
             break;
           }
         }
       }
       //console.log('kkkkk',findArray, temp);
       return findArray.length === temp.length;
-    }
-    else {
+    } else {
       return false;
     }
   }
@@ -873,8 +872,8 @@ class helper_Helpers {
    * @param sourceArray
    * @returns {*[]}
    */
-  repeatArray(sourceArray = []){
-    if(this.checkVarType(sourceArray) !== 'array') {
+  repeatArray(sourceArray = []) {
+    if (this.checkVarType(sourceArray) !== 'array') {
       console.log('repeatArray.sourceArray.error', sourceArray);
       throw new Error('sourceArray参数类型是数组')
     }
@@ -887,7 +886,7 @@ class helper_Helpers {
    * @param findArray
    * @returns {*[]}
    */
-  unionArray(sourceArray = [], findArray = []){
+  unionArray(sourceArray = [], findArray = []) {
     if (this.checkVarType(sourceArray) !== 'array') {
       console.log('unionArray.sourceArray.error', sourceArray);
       throw new Error('sourceArray参数类型是数组')
@@ -906,7 +905,7 @@ class helper_Helpers {
    * @param findArray
    * @returns {*[]}
    */
-  intersectionArray(sourceArray = [], findArray = []){
+  intersectionArray(sourceArray = [], findArray = []) {
     if (this.checkVarType(sourceArray) !== 'array') {
       console.log('intersectionArray.sourceArray.error', sourceArray);
       throw new Error('sourceArray参数类型是数组')
@@ -926,7 +925,7 @@ class helper_Helpers {
    * @param findArray
    * @returns {*[]}
    */
-  differenceArray(sourceArray = [], findArray = []){
+  differenceArray(sourceArray = [], findArray = []) {
     if (this.checkVarType(sourceArray) !== 'array') {
       console.log('differenceArray.sourceArray.error', sourceArray);
       throw new Error('sourceArray参数类型是数组')
@@ -969,14 +968,14 @@ class helper_Helpers {
    * @param source
    * @param callback
    */
-  forEach(source, callback){
-    if(this.checkVarType(source) === 'object' && !this.isEmpty(source)) {
+  forEach(source, callback) {
+    if (this.checkVarType(source) === 'object' && !this.isEmpty(source)) {
       Object.keys(source).forEach(callback);
-    }else if(this.checkVarType(source) === 'array') {
-      source.forEach((item, index)=>{
+    } else if (this.checkVarType(source) === 'array') {
+      source.forEach((item, index) => {
         callback(index);
       });
-    }else{
+    } else {
       console.log('forEach.error', source);
       throw new Error('只支持数组与JSON对象格式');
     }
@@ -1034,10 +1033,10 @@ class helper_Helpers {
         if (force && this.checkVarType(item[id]) === 'string' && regNumber.test(item[id])) {
           numId = parseInt(item[id]);
         }
-        if(force) {
+        if (force) {
           item['id'] = numId;
           item['key'] = numId;
-        }else {
+        } else {
           if (!item['id']) item['id'] = numId;
           if (!item['key']) item['key'] = numId;
         }
@@ -1065,12 +1064,12 @@ class helper_Helpers {
    * {'1':{id: 1,name:'gao'},'2':{id: 2,name:'wu'}}
    * @return []
    */
-  isKeyInLists(list, value, keyName='id', strict = false){
+  isKeyInLists(list, value, keyName = 'id', strict = false) {
     let items = null;
-    if(this.checkVarType(list) === 'array'
+    if (this.checkVarType(list) === 'array'
       || this.checkVarType(list) === 'object'
-    ){
-      this.forEach(list,(index)=>{
+    ) {
+      this.forEach(list, (index) => {
         let item = list[index];
         //严格判断
         if (strict) {
@@ -1085,8 +1084,7 @@ class helper_Helpers {
         }
       });
       return items;
-    }
-    else{
+    } else {
       console.log('isKeyInLists.error', list);
       throw new Error('只支持数组与JSON对象格式');
 
@@ -1102,7 +1100,7 @@ class helper_Helpers {
    *
    * @returns {[]}
    */
-  getValuesForList( list, values = [], findKey = 'value', strict = true) {
+  getValuesForList(list, values = [], findKey = 'value', strict = true) {
     let temp = [];
     //对象与数组处理
     if (this.checkVarType(list) === 'object' ||
@@ -1128,7 +1126,7 @@ class helper_Helpers {
    * {'1':{id: 1,name:'gao'},'2':{id: 2,name:'wu'}}
    * @return []
    */
-  getListKeyForValue(list, keyName = 'id'){
+  getListKeyForValue(list, keyName = 'id') {
     let arr = [];
     if (this.checkVarType(list) === 'array'
       || this.checkVarType(list) === 'object'
@@ -1220,7 +1218,7 @@ class helper_Helpers {
    * @description url base64.encode
    * @param row
    */
-  paramsBase64Encode(row){
+  paramsBase64Encode(row) {
     return base64["Base64"].encodeURI(JSON.stringify(row));
   }
 
@@ -1229,10 +1227,9 @@ class helper_Helpers {
    * @param base64Str
    */
   paramsBase64Decode(base64Str) {
-    try{
+    try {
       return JSON.parse(base64["Base64"].decode(base64Str));
-    }
-    catch (e) {
+    } catch (e) {
       return {};
     }
 
@@ -1265,7 +1262,7 @@ class helper_Helpers {
    * @param len
    * @param useType {String} 返回值类型 默认：''=>返回截取字符串  len=> 返回字符串长度
    */
-  cutStringLen(val, len = 10, useType='') {
+  cutStringLen(val, len = 10, useType = '') {
     let fix = '...';
     let newLength = 0;
     let newStr = "";
@@ -1350,7 +1347,7 @@ class helper_Helpers {
    * @description 获取用户登录token
    */
   getToken() {
-    if(this.setting && this.setting['userInfoSaveCookieKey']) {
+    if (this.setting && this.setting['userInfoSaveCookieKey']) {
       let token = uitls_cookie.get(this.setting['userInfoSaveCookieKey']);
       if (token) {
         return uitls_cookie.get(this.setting['userInfoSaveCookieKey']);
@@ -1358,8 +1355,7 @@ class helper_Helpers {
         this.removeUserInfo();
         return token;
       }
-    }
-    else {
+    } else {
       throw new Error('无配置信息选项');
     }
   }
@@ -1374,8 +1370,7 @@ class helper_Helpers {
       } else {
         return null;
       }
-    }
-    else {
+    } else {
       throw new Error('无配置信息选项');
     }
 
@@ -1405,7 +1400,7 @@ class helper_Helpers {
    * @param route
    */
   getMarketType(route, markeConstant) {
-    if(!markeConstant) {
+    if (!markeConstant) {
       markeConstant = {
         SHOP: '1',
         CAKE: '2',
@@ -1416,7 +1411,7 @@ class helper_Helpers {
     }
     let routeArr = route.path.split('/');
     let typeKey = routeArr[2].toLocaleUpperCase();
-    console.log('routeArr', markeConstant[typeKey],typeKey);
+    console.log('routeArr', markeConstant[typeKey], typeKey);
     return markeConstant[typeKey];
   }
 
@@ -1425,7 +1420,7 @@ class helper_Helpers {
    * @param route
    * @param index
    */
-  getMarketRouteListName(route,index=2){
+  getMarketRouteListName(route, index = 2) {
     let routeArr = route.path.split('/');
     let typeKey = routeArr[index].toLocaleLowerCase();
     console.log('routeArr', typeKey, index);
@@ -1437,7 +1432,7 @@ class helper_Helpers {
    * @param route
    * @param index
    */
-  getMarketRouteKey(route, index=0) {
+  getMarketRouteKey(route, index = 0) {
     let routeArr = route.path.split('/');
     let typeKey = routeArr[index].toLocaleLowerCase();
     console.log('routeArr', typeKey, index);
@@ -1465,9 +1460,9 @@ class helper_Helpers {
    * @param targetNum
    * @return number
    */
-  addFloatNumber(currentNum, targetNum){
+  addFloatNumber(currentNum, targetNum) {
     let power = this.checkFloatMore(currentNum, targetNum);
-    return (this.multiplyFloatNumber(currentNum, power) + this.multiplyFloatNumber(targetNum, power )) / power;
+    return (this.multiplyFloatNumber(currentNum, power) + this.multiplyFloatNumber(targetNum, power)) / power;
   }
 
   /**
@@ -1686,6 +1681,25 @@ class helper_Helpers {
       str += arrstring[index];
     }
     return str;
+  }
+
+
+
+  /**
+   * @description 判断是否为PC端
+   * @returns {boolean} true=>PC  false=>phone
+   */
+  isPC() {
+    let sUserAgent = navigator.userAgent.toLowerCase();
+    let bIsIpad = sUserAgent.match(/ipad/i) == "ipad";
+    let bIsIphoneOs = sUserAgent.match(/iphone os/i) == "iphone os";
+    let bIsMidp = sUserAgent.match(/midp/i) == "midp";
+    let bIsUc7 = sUserAgent.match(/rv:1.2.3.4/i) == "rv:1.2.3.4";
+    let bIsUc = sUserAgent.match(/ucweb/i) == "ucweb";
+    let bIsAndroid = sUserAgent.match(/android/i) == "android";
+    let bIsCE = sUserAgent.match(/windows ce/i) == "windows ce";
+    let bIsWM = sUserAgent.match(/windows mobile/i) == "windows mobile";
+    return !(bIsIpad || bIsIphoneOs || bIsMidp || bIsUc7 || bIsUc || bIsAndroid || bIsCE || bIsWM);
   }
 
 
