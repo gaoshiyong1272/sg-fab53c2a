@@ -717,7 +717,7 @@ class Helpers {
    * @description 两个小数相加
    * @param currentNum
    * @param targetNum
-   * @return number
+   * @return {number|string}
    */
   addFloatNumber(currentNum, targetNum) {
     if(this.checkVarType(currentNum) !== 'number'
@@ -725,6 +725,7 @@ class Helpers {
     ){
       console.warn(`参数必须为数字类型: currentNum=${currentNum}, targetNum=${targetNum}`);
       console.error('【addFloatNumber】方法的参数必须为数字类型');
+      return ''
     }
     let power = this.checkFloatMore(currentNum, targetNum);
     return (this.multiplyFloatNumber(currentNum, power) + this.multiplyFloatNumber(targetNum, power)) / power;
@@ -734,7 +735,7 @@ class Helpers {
    * @description 两个小数减
    * @param currentNum
    * @param targetNum
-   * @return number
+   * @return {number|string}
    */
   cutFloatNumber(currentNum, targetNum) {
     if (this.checkVarType(currentNum) !== 'number'
@@ -742,6 +743,7 @@ class Helpers {
     ) {
       console.warn(`参数必须为数字类型: currentNum=${currentNum}, targetNum=${targetNum}`);
       console.error('【cutFloatNumber】方法的参数必须为数字类型');
+      return ''
     }
     let power = this.checkFloatMore(currentNum, targetNum);
     return (this.multiplyFloatNumber(currentNum, power) - this.multiplyFloatNumber(targetNum, power)) / power;
@@ -751,7 +753,7 @@ class Helpers {
    * @description 计算两个小数相乘
    * @param currentNum
    * @param targetNum
-   * @returns {number}
+   * @returns {number|string}
    */
   multiplyFloatNumber(currentNum, targetNum){
     if (this.checkVarType(currentNum) !== 'number'
@@ -759,6 +761,7 @@ class Helpers {
     ) {
       console.warn(`参数必须为数字类型: currentNum=${currentNum}, targetNum=${targetNum}`);
       console.error('【multiplyFloatNumber】方法的参数必须为数字类型');
+      return ''
     }
     let m = 0, s1 = currentNum.toString(), s2 = targetNum.toString();
     try {m += s1.split(".")[1].length;} catch (e) {}
@@ -770,7 +773,7 @@ class Helpers {
    * @description 计算两个小数相除
    * @param currentNum
    * @param targetNum
-   * @returns {number}
+   * @returns {number|string}
    */
   divisionFloatNumber(currentNum, targetNum){
     if (this.checkVarType(currentNum) !== 'number'
@@ -778,6 +781,7 @@ class Helpers {
     ) {
       console.warn(`参数必须为数字类型: currentNum=${currentNum}, targetNum=${targetNum}`);
       console.error('【divisionFloatNumber】方法的参数必须为数字类型');
+      return ''
     }
     let t1 = 0, t2 = 0, r1, r2;
     try {t1 = currentNum.toString().split(".")[1].length} catch (e) {}
