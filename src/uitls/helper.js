@@ -720,6 +720,12 @@ class Helpers {
    * @return number
    */
   addFloatNumber(currentNum, targetNum) {
+    if(this.checkVarType(currentNum) !== 'number'
+      || this.checkVarType(targetNum) !== 'number'
+    ){
+      console.warn(`参数必须为数字类型: currentNum=${currentNum}, targetNum=${targetNum}`);
+      console.error('【addFloatNumber】方法的参数必须为数字类型');
+    }
     let power = this.checkFloatMore(currentNum, targetNum);
     return (this.multiplyFloatNumber(currentNum, power) + this.multiplyFloatNumber(targetNum, power)) / power;
   }
@@ -731,6 +737,12 @@ class Helpers {
    * @return number
    */
   cutFloatNumber(currentNum, targetNum) {
+    if (this.checkVarType(currentNum) !== 'number'
+      || this.checkVarType(targetNum) !== 'number'
+    ) {
+      console.warn(`参数必须为数字类型: currentNum=${currentNum}, targetNum=${targetNum}`);
+      console.error('【cutFloatNumber】方法的参数必须为数字类型');
+    }
     let power = this.checkFloatMore(currentNum, targetNum);
     return (this.multiplyFloatNumber(currentNum, power) - this.multiplyFloatNumber(targetNum, power)) / power;
   }
@@ -742,6 +754,12 @@ class Helpers {
    * @returns {number}
    */
   multiplyFloatNumber(currentNum, targetNum){
+    if (this.checkVarType(currentNum) !== 'number'
+      || this.checkVarType(targetNum) !== 'number'
+    ) {
+      console.warn(`参数必须为数字类型: currentNum=${currentNum}, targetNum=${targetNum}`);
+      console.error('【multiplyFloatNumber】方法的参数必须为数字类型');
+    }
     let m = 0, s1 = currentNum.toString(), s2 = targetNum.toString();
     try {m += s1.split(".")[1].length;} catch (e) {}
     try {m += s2.split(".")[1].length;} catch (e) {}
@@ -755,6 +773,12 @@ class Helpers {
    * @returns {number}
    */
   divisionFloatNumber(currentNum, targetNum){
+    if (this.checkVarType(currentNum) !== 'number'
+      || this.checkVarType(targetNum) !== 'number'
+    ) {
+      console.warn(`参数必须为数字类型: currentNum=${currentNum}, targetNum=${targetNum}`);
+      console.error('【divisionFloatNumber】方法的参数必须为数字类型');
+    }
     let t1 = 0, t2 = 0, r1, r2;
     try {t1 = currentNum.toString().split(".")[1].length} catch (e) {}
     try {t2 = targetNum.toString().split(".")[1].length} catch (e) {}
