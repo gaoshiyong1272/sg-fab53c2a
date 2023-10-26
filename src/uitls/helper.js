@@ -713,6 +713,15 @@ class Helpers {
     return Math.pow(10, Math.max(sq1, sq2));
   }
 
+  checkStrIsNumber(str){
+    if(this.checkVarType(str) === 'string') {
+      let reg = /^[+-]?\d*(\.\d*)?(e[+-]?\d+)?$/;
+      if(reg.test(str)) return  Number(str);
+      return str
+    }
+    else return str
+  }
+
   /**
    * @description 两个小数相加
    * @param currentNum
@@ -720,6 +729,8 @@ class Helpers {
    * @return {number|string}
    */
   addFloatNumber(currentNum, targetNum) {
+    currentNum = this.checkStrIsNumber(currentNum);
+    targetNum = this.checkStrIsNumber(targetNum);
     if(this.checkVarType(currentNum) !== 'number'
       || this.checkVarType(targetNum) !== 'number'
     ){
@@ -738,6 +749,8 @@ class Helpers {
    * @return {number|string}
    */
   cutFloatNumber(currentNum, targetNum) {
+    currentNum = this.checkStrIsNumber(currentNum);
+    targetNum = this.checkStrIsNumber(targetNum);
     if (this.checkVarType(currentNum) !== 'number'
       || this.checkVarType(targetNum) !== 'number'
     ) {
@@ -756,6 +769,8 @@ class Helpers {
    * @returns {number|string}
    */
   multiplyFloatNumber(currentNum, targetNum){
+    currentNum = this.checkStrIsNumber(currentNum);
+    targetNum = this.checkStrIsNumber(targetNum);
     if (this.checkVarType(currentNum) !== 'number'
       || this.checkVarType(targetNum) !== 'number'
     ) {
@@ -776,6 +791,8 @@ class Helpers {
    * @returns {number|string}
    */
   divisionFloatNumber(currentNum, targetNum){
+    currentNum = this.checkStrIsNumber(currentNum);
+    targetNum = this.checkStrIsNumber(targetNum);
     if (this.checkVarType(currentNum) !== 'number'
       || this.checkVarType(targetNum) !== 'number'
     ) {
@@ -988,8 +1005,6 @@ class Helpers {
     let bIsWM = sUserAgent.match(/windows mobile/i) == "windows mobile";
     return !(bIsIpad || bIsIphoneOs || bIsMidp || bIsUc7 || bIsUc || bIsAndroid || bIsCE || bIsWM);
   }
-
-
 }
 
 export default Helpers;
